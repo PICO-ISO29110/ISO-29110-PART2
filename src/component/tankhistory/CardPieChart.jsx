@@ -168,10 +168,6 @@ const size = {
   height: 285,
 };
 
-const data2 = {
-  data: desktopOS,
-  valueFormatter,
-};
 
   return (
     <>

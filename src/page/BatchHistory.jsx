@@ -13,7 +13,7 @@ const BatchHistory = () => {
         BatchHistory
       </Typography>
 
-      
+
 <Divider sx={{marginTop : 2 , marginBottom : 2 ,}}>
         <Chip label="Batch History Data" size="small" />
       </Divider>

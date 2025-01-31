@@ -28,6 +28,7 @@ import { useEffect } from 'react';
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
+import { useUserContext } from '../../template/userContent';
 const style = {
   position: 'absolute',
   top: '50%',
@@ -47,7 +48,7 @@ const style = {
 const paginationModel = { page: 0, pageSize: 5 };
 
 export default function ChildUser({ headerFilter }) {
-
+  const { data } = useUserContext();
 // popup create user
 const handlePermissionChange = (event) => {
   setPermission(event.target.value);
@@ -99,7 +100,7 @@ const handleSubmit = () => {
       user_password: formData.password,
       user_status: formData.status,
       user_role_id: formData.permission,
-      user_create: 1,
+      user_create: data.user_id,
     }),
   })
     .then(response => response.json())
@@ -257,7 +258,7 @@ const handleCloseEdit = () => setOpenModualEdit(false);
         },
         body: JSON.stringify({
           "userID": id,
-          "UserDeleteBy": 1
+          "UserDeleteBy": data.user_id
         }),
       });
 
@@ -333,7 +334,7 @@ const handleSubmitEdit = () => {
     user_password: password,
     user_status: status,
     user_role_id: permission,
-    user_create: 1
+    user_create: data.user_id
   };
 
 

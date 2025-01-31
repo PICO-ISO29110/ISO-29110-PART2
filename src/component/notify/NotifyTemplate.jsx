@@ -13,7 +13,9 @@ import {
   Pagination,
 } from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify';
+import { useUserContext } from '../../template/userContent';
 const NotifyTemplate = () => {
+  const { data } = useUserContext();
   const [alignment, setAlignment] = useState('Volume');
   const [select , setSelect] = useState('')
   const [alarms, setAlarms] = useState([]);
@@ -127,7 +129,7 @@ const NotifyTemplate = () => {
     // ทำสิ่งที่ต้องการต่อ เช่น เรียก API เพื่ออัปเดตสถานะ
   };
   
-  const handleAcknowledge = (id) => {
+  const handleAcknowledge = (id,userId) => {
     console.log('Acknowledged ID:', id);
     // ทำสิ่งที่ต้องการต่อ เช่น เรียก API เพื่ออัปเดตสถานะ
 
@@ -138,7 +140,8 @@ const NotifyTemplate = () => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            "NotifyID": id
+            "NotifyID": id ,
+            "userId" : userId
           }),
         })
       
@@ -159,7 +162,7 @@ const NotifyTemplate = () => {
   
   };
 
-  const handleAcknowledge2 = (id) => {
+  const handleAcknowledge2 = (id,userId) => {
     console.log('Acknowledged ID:', id);
     // ทำสิ่งที่ต้องการต่อ เช่น เรียก API เพื่ออัปเดตสถานะ
     fetch('http://100.82.151.125:8000/Update_Actknowlage_batch/', {
@@ -169,7 +172,8 @@ const NotifyTemplate = () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        "NotifyID": id
+        "NotifyID": id ,
+            "userId" : userId
       }),
     })
   
@@ -194,7 +198,7 @@ const NotifyTemplate = () => {
 
 
 
-  const handleAcknowledge3 = (id) => {
+  const handleAcknowledge3 = (id,userId) => {
     console.log('Acknowledged ID:', id);
     // ทำสิ่งที่ต้องการต่อ เช่น เรียก API เพื่ออัปเดตสถานะ
 
@@ -205,7 +209,8 @@ const NotifyTemplate = () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        "NotifyID": id
+        "NotifyID": id ,
+        "userId" : userId
       }),
     })
   
@@ -270,7 +275,7 @@ const NotifyTemplate = () => {
                 <Button size="small" onClick={() => handleDismiss(alarm.device_volume_record_id)}>
                   Dismiss
                 </Button>
-                <Button size="small" onClick={() => handleAcknowledge(alarm.device_volume_record_id)}>
+                <Button size="small" onClick={() => handleAcknowledge(alarm.device_volume_record_id , data.user_id)}>
                   Acknowledge
                 </Button>
               </CardActions>
@@ -321,7 +326,7 @@ const NotifyTemplate = () => {
                 <Button size="small" onClick={() => handleDismiss(alarm.alarm_batch_record_id)}>
                   Dismiss
                 </Button>
-                <Button size="small" onClick={() => handleAcknowledge2(alarm.alarm_batch_record_id)}>
+                <Button size="small" onClick={() => handleAcknowledge2(alarm.device_volume_record_id , data.user_id)}>
                   Acknowledge
                 </Button>
               </CardActions>
@@ -370,7 +375,7 @@ const NotifyTemplate = () => {
                 <Button size="small" onClick={() => handleDismiss(alarm.device_level_record_id)}>
                   Dismiss
                 </Button>
-                <Button size="small" onClick={() => handleAcknowledge3(alarm.device_level_record_id)}>
+                <Button size="small" onClick={() => handleAcknowledge3(alarm.device_volume_record_id , data.user_id)}>
                   Acknowledge
                 </Button>
               </CardActions>

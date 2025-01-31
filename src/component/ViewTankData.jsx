@@ -243,7 +243,7 @@ const ViewTankData = () => {
   sx={{ width: '100%' }}
   height={560}
       series={[
-        { data: seriesData, label: 'value' },
+        { data: seriesData, label: 'value' , showMark: false,},
       ]}
       xAxis={[{ scaleType: 'point', data: xAxisData }]}
       

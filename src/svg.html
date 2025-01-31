@@ -1,0 +1,20 @@
+<svg width="500" height="100" xmlns="http://www.w3.org/2000/svg">
+    <circle id="movingCircle" cx="20" cy="50" r="10" fill="blue" />
+    <text id="counter" x="20" y="80" font-size="20" fill="black">1</text>
+    
+    <script>
+        let textElement = document.getElementById("counter");
+        let circleElement = document.getElementById("movingCircle");
+        let frame = 1;
+        
+        function updateFrame() {
+            frame = (frame % 6) + 1; // หมุนตัวเลข 1-6
+            let newX = 20 + frame * 50;
+            textElement.textContent = frame;
+            textElement.setAttribute("x", newX);
+            circleElement.setAttribute("cx", newX);
+            setTimeout(updateFrame, 800);
+        }
+        updateFrame();
+    </script>
+</svg>

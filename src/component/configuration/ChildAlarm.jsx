@@ -24,6 +24,8 @@ import { useEffect } from 'react';
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { ToastContainer, toast } from 'react-toastify';
+import { useUserContext } from '../../template/userContent';
+
 
 const style = {
   position: 'absolute',
@@ -44,6 +46,8 @@ const style = {
 const paginationModel = { page: 0, pageSize: 5 };
 
 export default function ChildAlarm({ headerFilter }) {
+
+  const { data } = useUserContext();
 
 // popup create user
 const handlePermissionChange = (event) => {
@@ -247,7 +251,7 @@ try {
         },
         body: JSON.stringify({
           "alarmID": id,
-  "AlarmDeleteID": 1
+          "AlarmDeleteID": data.user_id
         }),
       });
 
@@ -291,7 +295,7 @@ const handleSubmitEdit = () => {
       "devicevolumehighs": Volume_height,
       "batchDurationSets": Set_Batch_Duration,
       "selectBatchs": latestBatch2,
-      "datausercreate": 1
+      "datausercreate": data.user_id
     
   };
 
@@ -460,7 +464,7 @@ const [notifyData, setNotifyData] = useState([]); // เก็บข้อมู
         "notifyselect": Notify_Selected,
         "selectBatchs": Batch_id,
         "batchDurationSets": Set_Batch_Duration,
-        "datausercreate": 1
+        "datausercreate": data.user_id
       }),
     })
   

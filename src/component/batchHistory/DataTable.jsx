@@ -1,21 +1,21 @@
-
-
 import * as React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { useRef ,useState ,useEffect} from 'react';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
-import { Stack , Box ,Button ,Popper ,Typography  ,RadioGroup ,FormControlLabel  ,Radio,Select ,MenuItem ,Chip  } from '@mui/material';
+import { Stack , Box ,Button ,Popper ,Typography  ,RadioGroup ,FormControlLabel  ,Radio,Select ,MenuItem ,Chip ,IconButton  } from '@mui/material';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import GetAppIcon from '@mui/icons-material/GetApp';
 import { ToastContainer, toast } from 'react-toastify';
-
-
+import SummarizeIcon from '@mui/icons-material/Summarize';
+import Report from './report';
 
 const paginationModel = { page: 0, pageSize: 5 };
 
 export default function DataTable({ headerFilter }) {
   const [rowss, setRows] = useState([]);
+  const [batchidpopup ,setbatchidpopup] = useState();
+  const [batchpopup ,setbatchpopup] = useState(false);
   const [open, setOpen] = useState(false);
   const [filterType, setFilterType] = useState('last');
   const [lastDuration, setLastDuration] = useState('30min');
@@ -43,7 +43,7 @@ export default function DataTable({ headerFilter }) {
     // console.log(row);
     return (
       (row.device_batch_end_volume ? row.device_batch_end_volume.toString().toLowerCase() : '').includes(searchQuery.toLowerCase()) || // ค้นหาด้วยชื่ออุปกรณ์
-      (row.device_batch_history_volume ? row.device_batch_history_volume.toString().toLowerCase() : '').includes(searchQuery.toLowerCase()) || // ค้นหาด้วยระยะทางอุปกรณ์
+      (row.device_batch_value ? row.device_batch_value.toString().toLowerCase() : '').includes(searchQuery.toLowerCase()) || // ค้นหาด้วยระยะทางอุปกรณ์
       (row.device_batch_start_time ? row.device_batch_start_time.toString().toLowerCase() : '').includes(searchQuery.toLowerCase()) || // ค้นหาด้วยเวลา
       (row.device_batch_start_volume ? row.device_batch_start_volume.toString().toLowerCase() : '').includes(searchQuery.toLowerCase()) // ค้นหาด้วยสถานะ
     );
@@ -53,6 +53,9 @@ export default function DataTable({ headerFilter }) {
     setOpen((prevOpen) => !prevOpen);
   };
 
+  const closePopup = () => {
+    setbatchpopup(false);
+  };
 
     const fetchData = async (startTime , stopTime) => {
       
@@ -81,7 +84,7 @@ export default function DataTable({ headerFilter }) {
           data.GetBatchHistoryData.map((item) => ({
 
           device_batch_id: item.device_batch_id, 
-          device_batch_history_volume: item.device_batch_history_volume + ' L', 
+          device_batch_value: item.device_batch_value + ' L', 
           device_batch_start_volume: item.device_batch_start_volume + ' L',
           device_batch_end_volume: item.device_batch_end_volume + ' L' , 
           device_batch_start_time : item.device_batch_start_time, 
@@ -142,6 +145,20 @@ const submitExportData = async (startTime, stopTime) => {
   .catch(error => console.log('Error:', error));
 
 }
+
+
+
+const handleEdit = async (id) => {
+  const resolvedId = await Promise.resolve(id);
+  console.log(resolvedId)
+  // alert(`Edit row with ID: ${resolvedId}`);
+  let modual = true;
+  setbatchidpopup(id)
+  setbatchpopup(modual)
+
+};
+
+
 
   return (
     <>
@@ -207,18 +224,18 @@ const submitExportData = async (startTime, stopTime) => {
   rows={filteredRows}
   columns={[
     { field: "device_batch_id", headerName: "ID", width: 200 },
-    { field: "device_batch_history_volume", headerName: "Volu", width: 300 },
-    { field: "device_batch_start_volume", headerName: "Start Volume", width: 300 },
+    { field: "device_batch_value", headerName: "Volu", width: 200 },
+    { field: "device_batch_start_volume", headerName: "Start Volume", width: 200 },
     { field: "device_batch_end_volume", headerName: "End Volume", width: 300 },
     { field: "device_batch_start_time", headerName: "Timestamp", width: 300 },
     {
       field: "device_batch_value_status",
       headerName: "Status",
-      width: 220,
+      width: 300,
       renderCell: (params) => (
         <Chip
-          label={params.value ? "Enable" : "Disable"}
-          color={params.value ? "success" : "error"}
+          label={params.value ? "on active" : "done"}
+          color={params.value ? "successs" : "success"}
           variant="outlined"
           style={{
             fontWeight: "bold",
@@ -228,6 +245,24 @@ const submitExportData = async (startTime, stopTime) => {
         />
       ),
     },
+
+    {
+      field: "manage",
+      headerName: "Manage",
+      width: 200,
+      renderCell: (params) => (
+        <Box>
+          {/* ปุ่มแก้ไข */}
+          <IconButton
+            onClick={() => handleEdit(params.row.device_batch_id)}
+            color="primary"
+            aria-label="edit"
+          >
+            <SummarizeIcon />
+          </IconButton>
+        </Box>
+      ),
+    }
   ]}
   pageSize={10}
   checkboxSelection
@@ -313,6 +348,8 @@ const submitExportData = async (startTime, stopTime) => {
 </Button>
           </Paper>
         </Popper>
+
+        <Report id = {batchidpopup} openpopup = {batchpopup} closePopup={closePopup} />
       </Box>
       <ToastContainer />
     </>

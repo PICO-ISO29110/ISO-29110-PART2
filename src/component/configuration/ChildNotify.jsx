@@ -23,7 +23,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useEffect } from 'react';
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-
+import { useUserContext } from '../../template/userContent';
 
 
 const style = {
@@ -46,7 +46,7 @@ const style = {
 const paginationModel = { page: 0, pageSize: 5 };
 
 export default function ChildNotify({ headerFilter }) {
-
+ const { data } = useUserContext();
 // popup create user
 const handlePermissionChange = (event) => {
   setPermission(event.target.value);
@@ -127,7 +127,7 @@ const handleClose = () => setOpenModual(false);
       notifyname : Token,
       linetoken : TokenName,
       notifystatus : status,
-      usercreate : 1
+      usercreate : data.user_id
     };
   
     fetch('http://100.82.151.125:8000/InsertNotify/', {
@@ -247,7 +247,7 @@ const handleClose = () => setOpenModual(false);
             },
             body: JSON.stringify({
               "notifyID": id,
-              "notifyDelete": 1
+              "notifyDelete": data.user_id
             }),
           });
     
@@ -287,7 +287,7 @@ const handleSubmitEdit = () => {
     "notifyname": TokenName,
     "linetoken": Token,
     "notifystatus": true,
-    "usercreate": 1
+    "usercreate": data.user_id
   }
   console.log("Form Data as JSON:", formData);
 

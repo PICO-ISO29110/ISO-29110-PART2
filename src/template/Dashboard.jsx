@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState , createContext, useContext, } from 'react';
 import PropTypes from 'prop-types';
 import { Badge } from '@mui/material';
 import Box from '@mui/material/Box';
@@ -45,6 +45,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import WifiIcon from '@mui/icons-material/Wifi';
 import CardDataHistory from '../component/dashboard/CardDataHistory';
 import NotifyTemplate from '../component/notify/NotifyTemplate';
+import { useUserContext } from '../template/userContent';
+
 
 import { useDemoRouter } from '@toolpad/core/internal';
 import {
@@ -56,61 +58,6 @@ import {
 import { red } from '@mui/material/colors';
 import Cookies from 'js-cookie';
 
-const NAVIGATION = [
-  {
-    kind: 'header',
-    title: 'Main Menu',
-  },
-  {
-    segment: 'dashboard',
-    title: 'Dashboard',
-    icon: <DashboardIcon />,
-  },
-  {
-    segment: 'TankHistory',
-    title: 'Tank History',
-    icon: <ManageSearchIcon />,
-  },
-  
-  {
-    segment: 'BatchHistory',
-    title: 'Batch History',
-    icon: <HistoryIcon />,
-  },
-  
-  {
-    segment: 'Event',
-    title: 'Event',
-    icon: <EventIcon />,
-  },
-
-  {
-    segment: 'Report',
-    title: 'Report',
-    icon: <TopicIcon />,
-  },
-
-  {
-    kind: 'divider'
-  } ,
-
-  {
-    kind: 'header',
-    title: 'User Management',
-  },
-
-  {
-    segment: 'Configuration',
-    title: 'Configuration',
-    icon: <SettingsIcon />,
-  },
-
-  {
-    segment: 'Test',
-    title: 'Test Componant',
-    icon: <BugReportIcon />,
-  },
-];
 
 const BRANDING = {
   title: 'Petro-Instrument',
@@ -424,28 +371,19 @@ function ToolbarActionsSearch() {
   }
 
 
-  function ToolbarActionsNotify() {
-    return (
-        // NotificationsIcon
 
 
-        <div>asdasd</div>
-    );
-  }
-
-
-
-// Dashbarod
 
 
 
 function DashboardLayoutAccountSidebar(props) {
 
-
-
   const [content, setContent] = useState(< Dashboard/>); // Set initial content to FilterProduct
   const { window } = props;
   const [pathname, setPathname] = React.useState('/dashboard');
+  
+
+
   // const [dataApi, SetDataApi] = React.useState([]);
   const navigate = useNavigate();
 
@@ -501,6 +439,7 @@ function DashboardLayoutAccountSidebar(props) {
 
 const [dataApi, setDataApi] = React.useState(null); // สมมติว่าข้อมูลจะถูกตั้งค่าในภายหลัง
 const [session, setSession] = React.useState(null);
+const [role , setRole] = useState();
 
 
 
@@ -525,6 +464,7 @@ React.useEffect(() => {
       .then(data => {
         console.log('User Data:', data);
         setDataApi(data);
+        setRole(data.user_role);
       })
       .catch(error => {
         console.error('Error fetching user data:', error);
@@ -590,6 +530,72 @@ DemoPageContent.propTypes = {
   pathname: PropTypes.string.isRequired,
   
 };
+
+
+
+
+const NAVIGATION = [
+  {
+    kind: 'header',
+    title: 'Main Menu',
+  },
+  {
+    segment: 'dashboard',
+    title: 'Dashboard',
+    icon: <DashboardIcon />,
+  },
+  {
+    segment: 'TankHistory',
+    title: 'Tank History',
+    icon: <ManageSearchIcon />,
+  },
+  
+  {
+    segment: 'BatchHistory',
+    title: 'Batch History',
+    icon: <HistoryIcon />,
+  },
+  
+  {
+    segment: 'Event',
+    title: 'Event',
+    icon: <EventIcon />,
+  },
+
+  {
+    segment: 'Report',
+    title: 'Report',
+    icon: <TopicIcon />,
+  },
+
+  {
+    kind: 'divider'
+  } ,
+
+  {
+    kind: 'header',
+    title: 'User Management',
+  },
+
+
+];
+
+if (role === "systemadmin") {
+
+  NAVIGATION.push({
+    segment: 'Configuration',
+    title: 'Configuration',
+    icon: <SettingsIcon />,
+  } ,
+
+  {
+    segment: 'Test',
+    title: 'Test Component',
+    icon: <BugReportIcon />,
+  },
+
+);
+}
 
 
   return (
